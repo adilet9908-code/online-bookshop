@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Қазақ Кітап - Онлайн кітап дүкені</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+        }
+        
+        html {
+            height: 100%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100%;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .cart-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .cart-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .cart-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        nav {
+            background: #34495e;
+            padding: 0;
+        }
+
+        .nav-tabs {
+            display: flex;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            background: none;
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            background: #2c3e50;
+            border-bottom-color: #3498db;
+        }
+
+        main {
+            padding: 2rem;
+            min-height: 60%;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border: 1px solid #ecf0f1;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .book-cover {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .book-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .book-author {
+            color: #7f8c8d;
+            margin-bottom: 0.5rem;
+        }
+
+        .book-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: #229954;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .category-card {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .cart-items {
+            background: #ecf0f1;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .cart-total {
+            background: #2c3e50;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .remove-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .about-content {
+            line-height: 1.8;
+            color: #2c3e50;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .submit-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #2980b9;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+            
+            .search-bar {
+                max-width: 100%;
+            }
+            
+            .nav-tabs {
+                justify-content: center;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            main {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    📚 Қазақ Кітап
+                </div>
+                <div class="search-bar">
+                    <input type="text" placeholder="Кітап іздеу..." id="searchInput">
+                </div>
+                <div class="cart-info">
+                    <button class="cart-btn" onclick="showTab('cart')">
+                        🛒 Себет (<span id="cartCount">0</span>)
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <nav>
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="showTab('home')">Басты бет</button>
+                <button class="nav-tab" onclick="showTab('fiction')">Көркем әдебиет</button>
+                <button class="nav-tab" onclick="showTab('educational')">Оқулықтар</button>
+                <button class="nav-tab" onclick="showTab('children')">Балалар кітаптары</button>
+                <button class="nav-tab" onclick="showTab('history')">Тарих</button>
+                <button class="nav-tab" onclick="showTab('cart')">Себет</button>
+                <button class="nav-tab" onclick="showTab('about')">Біз туралы</button>
+                <button class="nav-tab" onclick="showTab('contact')">Байланыс</button>
+            </div>
+        </nav>
+
+        <main>
+            <!-- Басты бет -->
+            <div id="home" class="tab-content active">
+                <div class="hero-section">
+                    <h1 class="hero-title">Қазақ Кітап дүкеніне қош келдіңіз!</h1>
+                    <p class="hero-subtitle">Қазақ тіліндегі ең үздік кітаптар мұнда</p>
+                </div>
+
+                <div class="categories">
+                    <div class="category-card" onclick="showTab('fiction')">
+                        <h3>📖 Көркем әдебиет</h3>
+                        <p>Қазақ жазушыларының шығармалары</p>
+                    </div>
+                    <div class="category-card" onclick="showTab('educational')">
+                        <h3>📚 Оқулықтар</h3>
+                        <p>Білім беру кітаптары</p>
+                    </div>
+                    <div class="category-card" onclick="showTab('children')">
+                        <h3>🧸 Балалар кітаптары</h3>
+                        <p>Кішкентайлар үшін ертегілер</p>
+                    </div>
+                    <div class="category-card" onclick="showTab('history')">
+                        <h3>🏛️ Тарих</h3>
+                        <p>Қазақстан тарихы</p>
+                    </div>
+                </div>
+
+                <h2>Ұсынылатын кітаптар</h2>
+                <div class="books-grid">
+                    <div class="book-card">
+                        <div class="book-cover">📖</div>
+                        <div class="book-title">Абай жолы</div>
+                        <div class="book-author">Мұхтар Әуезов</div>
+                        <div class="book-price">3500 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Абай жолы', 'Мұхтар Әуезов', 3500)">Себетке қосу</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-cover">📚</div>
+                        <div class="book-title">Қазақ тілі грамматикасы</div>
+                        <div class="book-author">Ә. Байтұрсынов</div>
+                        <div class="book-price">2800 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Қазақ тілі грамматикасы', 'Ә. Байтұрсынов', 2800)">Себетке қосу</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-cover">🧸</div>
+                        <div class="book-title">Алпамыс батыр</div>
+                        <div class="book-author">Халық ауызша дәстүрі</div>
+                        <div class="book-price">1500 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Алпамыс батыр', 'Халық ауызша дәстүрі', 1500)">Себетке қосу</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Көркем әдебиет -->
+            <div id="fiction" class="tab-content">
+                <h2>Көркем әдебиет</h2>
+                <div class="books-grid">
+                    <div class="book-card">
+                        <div class="book-cover">📖</div>
+                        <div class="book-title">Абай жолы</div>
+                        <div class="book-author">Мұхтар Әуезов</div>
+                        <div class="book-price">3500 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Абай жолы', 'Мұхтар Әуезов', 3500)">Себетке қосу</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-cover">📝</div>
+                        <div class="book-title">Қан мен тер</div>
+                        <div class="book-author">Әбдіжәміл Нұрпейісов</div>
+                        <div class="book-price">2900 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Қан мен тер', 'Әбдіжәміл Нұрпейісов', 2900)">Себетке қосу</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-cover">🌟</div>
+                        <div class="book-title">Махаббат, қызық мол жылдар</div>
+                        <div class="book-author">Әзілхан Нұршайықов</div>
+                        <div class="book-price">2600 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Махаббат, қызық мол жылдар', 'Әзілхан Нұршайықов', 2600)">Себетке қосу</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-cover">🏔️</div>
+                        <div class="book-title">Ақиқат пен аңыз</div>
+                        <div class="book-author">Олжас Сүлейменов</div>
+                        <div class="book-price">3200 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Ақиқат пен аңыз', 'Олжас Сүлейменов', 3200)">Себетке қосу</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Оқулықтар -->
+            <div id="educational" class="tab-content">
+                <h2>Оқулықтар</h2>
+                <div class="books-grid">
+                    <div class="book-card">
+                        <div class="book-cover">📚</div>
+                        <div class="book-title">Қазақ тілі грамматикасы</div>
+                        <div class="book-author">Ә. Байтұрсынов</div>
+                        <div class="book-price">2800 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Қазақ тілі грамматикасы', 'Ә. Байтұрсынов', 2800)">Себетке қосу</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-cover">🔢</div>
+                        <div class="book-title">Математика 10 сынып</div>
+                        <div class="book-author">А. Абылкасымова</div>
+                        <div class="book-price">4200 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Математика 10 сынып', 'А. Абылкасымова', 4200)">Себетке қосу</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-cover">🧪</div>
+                        <div class="book-title">Химия негіздері</div>
+                        <div class="book-author">Б. Бейсенова</div>
+                        <div class="book-price">3800 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Химия негіздері', 'Б. Бейсенова', 3800)">Себетке қосу</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-cover">🌍</div>
+                        <div class="book-title">География 9 сынып</div>
+                        <div class="book-author">К. Каймулдинова</div>
+                        <div class="book-price">3600 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('География 9 сынып', 'К. Каймулдинова', 3600)">Себетке қосу</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Балалар кітаптары -->
+            <div id="children" class="tab-content">
+                <h2>Балалар кітаптары</h2>
+                <div class="books-grid">
+                    <div class="book-card">
+                        <div class="book-cover">🧸</div>
+                        <div class="book-title">Алпамыс батыр</div>
+                        <div class="book-author">Халық ауызша дәстүрі</div>
+                        <div class="book-price">1500 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Алпамыс батыр', 'Халық ауызша дәстүрі', 1500)">Себетке қосу</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-cover">🦊</div>
+                        <div class="book-title">Түлкі мен қасқыр</div>
+                        <div class="book-author">Қазақ ертегілері</div>
+                        <div class="book-price">1200 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Түлкі мен қасқыр', 'Қазақ ертегілері', 1200)">Себетке қосу</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-cover">🌙</div>
+                        <div class="book-title">Ай мен күн</div>
+                        <div class="book-author">Мағжан Жұмабаев</div>
+                        <div class="book-price">1800 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Ай мен күн', 'Мағжан Жұмабаев', 1800)">Себетке қосу</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-cover">🐎</div>
+                        <div class="book-title">Қобыланды батыр</div>
+                        <div class="book-author">Халық жыры</div>
+                        <div class="book-price">1600 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Қобыланды батыр', 'Халық жыры', 1600)">Себетке қосу</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Тарих -->
+            <div id="history" class="tab-content">
+                <h2>Тарих</h2>
+                <div class="books-grid">
+                    <div class="book-card">
+                        <div class="book-cover">🏛️</div>
+                        <div class="book-title">Қазақстан тарихы</div>
+                        <div class="book-author">Ә. Нұсұпбеков</div>
+                        <div class="book-price">4500 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Қазақстан тарихы', 'Ә. Нұсұпбеков', 4500)">Себетке қосу</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-cover">👑</div>
+                        <div class="book-title">Қазақ хандығы</div>
+                        <div class="book-author">Б. Аяған</div>
+                        <div class="book-price">3900 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Қазақ хандығы', 'Б. Аяған', 3900)">Себетке қосу</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-cover">⚔️</div>
+                        <div class="book-title">Кенесары хан</div>
+                        <div class="book-author">Е. Бекмаханов</div>
+                        <div class="book-price">3400 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Кенесары хан', 'Е. Бекмаханов', 3400)">Себетке қосу</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-cover">🌟</div>
+                        <div class="book-title">Тәуелсіздік жолы</div>
+                        <div class="book-author">Н. Назарбаев</div>
+                        <div class="book-price">5200 ₸</div>
+                        <button class="add-to-cart" onclick="addToCart('Тәуелсіздік жолы', 'Н. Назарбаев', 5200)">Себетке қосу</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Себет -->
+            <div id="cart" class="tab-content">
+                <h2>Сіздің себетіңіз</h2>
+                <div id="cartItems" class="cart-items">
+                    <p style="text-align: center; color: #7f8c8d; padding: 2rem;">Себет бос</p>
+                </div>
+                <div id="cartTotal" class="cart-total" style="display: none;">
+                    Жалпы сома: <span id="totalAmount">0</span> ₸
+                </div>
+                <button id="checkoutBtn" class="submit-btn" style="width: 100%; margin-top: 1rem; display: none;" onclick="checkout()">
+                    Тапсырыс беру
+                </button>
+            </div>
+
+            <!-- Біз туралы -->
+            <div id="about" class="tab-content">
+                <h2>Біз туралы</h2>
+                <div class="about-content">
+                    <p>Қазақ Кітап - Қазақстандағы ең ірі онлайн кітап дүкені. Біз 2020 жылдан бастап қазақ тіліндегі кітаптарды сатумен айналысамыз.</p>
+                    
+                    <h3>Біздің миссиямыз</h3>
+                    <p>Қазақ тіліндегі кітаптарды барлық адамдарға қолжетімді ету және қазақ әдебиетін дамытуға үлес қосу.</p>
+                    
+                    <h3>Неге бізді таңдау керек?</h3>
+                    <ul>
+                        <li>✅ Кең таңдау - 10,000+ кітап</li>
+                        <li>✅ Жылдам жеткізу - 1-3 күн ішінде</li>
+                        <li>✅ Қолайлы бағалар</li>
+                        <li>✅ Сапалы қызмет</li>
+                        <li>✅ 24/7 қолдау көрсету</li>
+                    </ul>
+                    
+                    <h3>Байланыс ақпараты</h3>
+                    <p>📍 Мекен-жайы: Алматы қ., Абай даңғылы 150<br>
+                    📞 Телефон: +7 (727) 123-45-67<br>
+                    📧 Email: info@qazaqkitap.kz</p>
+                </div>
+            </div>
+
+            <!-- Байланыс -->
+            <div id="contact" class="tab-content">
+                <h2>Бізбен байланысыңыз</h2>
+                <form class="contact-form" onsubmit="submitContact(event)">
+                    <div class="form-group">
+                        <label for="name">Атыңыз:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Телефон:</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Тақырып:</label>
+                        <input type="text" id="subject" name="subject" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Хабарлама:</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Хабарлама жіберу</button>
+                </form>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Қазақ Кітап. Барлық құқықтар қорғалған.</p>
+            <p>Қазақ тіліндегі кітаптардың ең үлкен онлайн дүкені</p>
+        </footer>
+    </div>
+
+    <script>
+        let cart = [];
+        let currentTab = 'home';
+
+        function showTab(tabName) {
+            // Барлық табтарды жасыру
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Таңдалған табты көрсету
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            currentTab = tabName;
+        }
+
+        function addToCart(title, author, price) {
+            const existingItem = cart.find(item => item.title === title);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    title: title,
+                    author: author,
+                    price: price,
+                    quantity: 1
+                });
+            }
+            
+            updateCartDisplay();
+            
+            // Хабарлама көрсету
+            showNotification(`"${title}" себетке қосылды!`);
+        }
+
+        function removeFromCart(title) {
+            cart = cart.filter(item => item.title !== title);
+            updateCartDisplay();
+            showNotification(`Кітап себеттен алынды`);
+        }
+
+        function updateCartDisplay() {
+            const cartCount = document.getElementById('cartCount');
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            const totalAmount = document.getElementById('totalAmount');
+            
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            cartCount.textContent = totalItems;
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p style="text-align: center; color: #7f8c8d; padding: 2rem;">Себет бос</p>';
+                cartTotal.style.display = 'none';
+                checkoutBtn.style.display = 'none';
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <div>
+                            <strong>${item.title}</strong><br>
+                            <small>${item.author}</small><br>
+                            <small>Саны: ${item.quantity}</small>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-weight: bold; color: #e74c3c;">${item.price * item.quantity} ₸</div>
+                            <button class="remove-btn" onclick="removeFromCart('${item.title}')">Алып тастау</button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                totalAmount.textContent = totalPrice.toLocaleString();
+                cartTotal.style.display = 'block';
+                checkoutBtn.style.display = 'block';
+            }
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                showNotification('Себет бос!');
+                return;
+            }
+            
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            showNotification(`Тапсырыс берілді! Жалпы сома: ${totalPrice.toLocaleString()} ₸`);
+            
+            // Себетті тазалау
+            cart = [];
+            updateCartDisplay();
+        }
+
+        function submitContact(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            
+            showNotification(`Рахмет, ${name}! Сіздің хабарламаңыз жіберілді. Біз жақын арада жауап береміз.`);
+            
+            // Форманы тазалау
+            event.target.reset();
+        }
+
+        function showNotification(message) {
+            // Хабарлама элементін жасау
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #27ae60;
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 1000;
+                font-weight: bold;
+                max-width: 300px;
+                word-wrap: break-word;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // 3 секундтан кейін жою
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 3000);
+        }
+
+        // Іздеу функциясы
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const bookCards = document.querySelectorAll('.book-card');
+            
+            bookCards.forEach(card => {
+                const title = card.querySelector('.book-title').textContent.toLowerCase();
+                const author = card.querySelector('.book-author').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || author.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Бастапқы жүктеу
+        updateCartDisplay();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9926c31be7a6bcb2',t:'MTc2MTExMjY5OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
